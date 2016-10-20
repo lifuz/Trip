@@ -80,4 +80,13 @@ dependencies {
      * gson
      */
     compile 'com.google.code.gson:gson:2.7'
+
+    /**
+     *  底部bar
+     */
+    compile 'com.roughike:bottom-bar:1.4.0'
+    /**
+     *  对话框特效
+     */
+    compile 'com.github.florent37:materialtextfield:1.0.6'
 }
