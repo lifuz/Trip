@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/primary">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="56dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
+
+        <!--  Name Label -->
+        <com.github.florent37.materialtextfield.MaterialTextField
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            app:mtf_image="@mipmap/ic_social_person_outline_black">
+            <EditText android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textCapWords"
+                android:hint="用户名"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/secondary_text" />
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+        <!-- Password Label -->
+        <com.github.florent37.materialtextfield.MaterialTextField
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            app:mtf_image="@mipmap/ic_action_lock_outline">
+            <com.lifuz.trip.ui.widget.PasswdEditText
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:hint="密码"
+                android:textColor="@color/primary_text"
+                android:textColorHint="@color/secondary_text"
+                android:drawableRight="@mipmap/ic_action_visibility_off"/>
+        </com.github.florent37.materialtextfield.MaterialTextField>
+
+        <!-- Signup Button -->
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btn_signup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:padding="12dp"
+            android:text="注  册"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/large_text_size"
+            android:background="@drawable/login_button_ripple"/>
+
+        <TextView android:id="@+id/link_login"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="前往登录"
+            android:gravity="center"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/second_text_size"/>
+
+    </LinearLayout>
+</ScrollView>

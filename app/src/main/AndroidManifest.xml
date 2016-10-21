@@ -55,6 +55,9 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden|adjustResize"/>
 
+        <activity android:name=".ui.activity.SignUpActivity"/>
+        <activity android:name=".ui.activity.MainActivity"/>
+
     </application>
 
 </manifest>
