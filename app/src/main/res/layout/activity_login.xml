@@ -8,14 +8,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <include layout="@layout/toolbar"/>
+        android:orientation="vertical"
+        android:paddingTop="56dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp">
 
         <com.github.florent37.materialtextfield.MaterialTextField
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@mipmap/ic_communication_stay_current_portrait"
             android:layout_gravity="center"
+            android:layout_marginBottom="8dp"
+            app:mtf_image="@mipmap/ic_communication_stay_current_portrait"
 
             >
 
@@ -23,115 +26,66 @@
                 android:id="@+id/login_phone_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/accent"
                 android:hint="手机号"
+                android:inputType="phone"
                 android:textColor="@color/primary_text"
                 android:textColorHint="@color/secondary_text"
-                android:textSize="15sp"
-                android:background="@color/accent"
-                android:inputType="phone"
-                />
+                android:textSize="15sp" />
 
         </com.github.florent37.materialtextfield.MaterialTextField>
 
         <com.github.florent37.materialtextfield.MaterialTextField
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:mtf_image="@mipmap/ic_action_lock_outline"
             android:layout_gravity="center"
-            android:layout_marginTop="10dp"
-            >
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:mtf_image="@mipmap/ic_action_lock_outline">
 
             <com.lifuz.trip.ui.widget.PasswdEditText
                 android:id="@+id/login_passwd_et"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:drawableRight="@mipmap/ic_action_visibility_off"
                 android:hint="密码"
+                android:inputType="textPassword"
                 android:textColor="@color/primary_text"
                 android:textColorHint="@color/secondary_text"
-                android:textSize="15sp"
-                android:inputType="textPassword"
-                android:drawableRight="@mipmap/ic_action_visibility_off"
-                />
+                android:textSize="15sp" />
 
         </com.github.florent37.materialtextfield.MaterialTextField>
 
         <android.support.v7.widget.ButtonBarLayout
-            android:layout_width="260dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="20dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp">
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/login_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/login_button_ripple"
                 android:layout_gravity="center"
-                android:textSize="@dimen/large_text_size"
+                android:background="@drawable/login_button_ripple"
                 android:text="登    录"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/primary_text"
+                android:padding="12dp"
+                android:textSize="@dimen/large_text_size"/>
         </android.support.v7.widget.ButtonBarLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/link_signup"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:gravity="bottom"
-            android:orientation="horizontal"
-            android:layout_marginTop="100dp">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="@color/divider"
-                android:layout_marginLeft="25dp"
-                android:layout_gravity="center"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:text="快速登录"
-                android:textColor="@color/primary_text"
-                android:textSize="@dimen/body_text_size"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="@color/divider"
-                android:layout_marginRight="25dp"
-                android:layout_gravity="center"/>
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:gravity="center">
-
-            <ImageButton
-                android:id="@+id/qq_login_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/login_logo_qq_prs"
-                android:layout_gravity="center"
-                android:background="#00000000"
-                />
-
-
-        </LinearLayout>
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="马上注册"
+            android:textColor="@color/primary_text"
+            android:textSize="@dimen/second_text_size" />
 
     </LinearLayout>
-
-
-
 
 
 </android.support.design.widget.CoordinatorLayout>

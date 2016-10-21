@@ -20,6 +20,12 @@ android {
     }
 }
 
+repositories{
+    flatDir{
+        dirs 'libs' //就是你放aar的目录地址
+    }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -89,4 +95,7 @@ dependencies {
      *  对话框特效
      */
     compile 'com.github.florent37:materialtextfield:1.0.6'
+
+    compile name:'SMSSDK-2.1.2',ext:'aar'
+    compile name:'SMSSDKGUI-2.1.2',ext:'aar'
 }

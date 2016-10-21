@@ -2,7 +2,10 @@ package com.lifuz.trip.application;
 
 import android.app.Application;
 
+import com.lifuz.trip.R;
 import com.lifuz.trip.api.ApiService;
+
+import cn.smssdk.SMSSDK;
 
 /**
  * app 上下文，初始化component
@@ -18,6 +21,8 @@ public class TripApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        SMSSDK.initSDK(this, getString(R.string.sms_appkey), getString(R.string.sms_appsecret));
 
         appComponent = DaggerAppComponent.builder()
                 .apiService(new ApiService())
