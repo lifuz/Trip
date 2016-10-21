@@ -53,6 +53,19 @@ public class SignUpActivity extends BaseActivity {
 
     }
 
+    @OnClick(R.id.btn_signup)
+    public void signUp(){
+
+
+
+    }
+
+
+    @OnClick(R.id.link_login)
+    public void login(){
+        finish();
+    }
+
     private void inject() {
 
         AppComponent appComponent = ((TripApplication) getApplication()).getAppComponent();
@@ -110,10 +123,5 @@ public class SignUpActivity extends BaseActivity {
             }
         });
 
-    }
-
-    @OnClick(R.id.link_login)
-    public void login(){
-        finish();
     }
 }

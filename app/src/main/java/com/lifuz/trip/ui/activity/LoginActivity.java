@@ -1,6 +1,8 @@
 package com.lifuz.trip.ui.activity;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -12,6 +14,7 @@ import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.lifuz.trip.R;
@@ -20,6 +23,7 @@ import com.lifuz.trip.application.TripApplication;
 import com.lifuz.trip.ui.component.DaggerLoginComponent;
 import com.lifuz.trip.ui.module.LoginModule;
 import com.lifuz.trip.ui.presenter.LoginPresenter;
+import com.lifuz.trip.ui.widget.CustomDialog;
 import com.lifuz.trip.ui.widget.PasswdEditText;
 
 import java.util.HashMap;
@@ -59,6 +63,8 @@ public class LoginActivity extends BaseActivity {
     @Inject
     LoginPresenter loginPresenter;
 
+    private ProgressDialog progressDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +76,47 @@ public class LoginActivity extends BaseActivity {
         initView();
 
         inject();
+
+    }
+
+    @OnClick(R.id.login_btn)
+    public void login(){
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+        imm.hideSoftInputFromWindow(login_phone_et.getWindowToken(), 0);
+
+        CustomDialog customDialog = new CustomDialog(this,R.style.CustomDialog);
+        customDialog.setMessage("正在登录...");
+        customDialog.show();
+
+
+    }
+
+    @OnClick(R.id.link_signup)
+    public void signUp() {
+
+        //打开注册页面
+        RegisterPage registerPage = new RegisterPage();
+        registerPage.setRegisterCallback(new EventHandler() {
+            public void afterEvent(int event, int result, Object data) {
+                // 解析注册结果
+                if (result == SMSSDK.RESULT_COMPLETE) {
+                    @SuppressWarnings("unchecked")
+                    HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
+                    String country = (String) phoneMap.get("country");
+                    String phone = (String) phoneMap.get("phone");
+
+                    Log.e(TAG,phone);
+
+                    Intent it = new Intent(LoginActivity.this, SignUpActivity.class);
+
+                    it.putExtra("phone",phone);
+                    startActivity(it);
+                }
+            }
+        });
+        registerPage.show(this);
 
     }
 
@@ -138,31 +185,6 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    @OnClick(R.id.link_signup)
-    public void signUP() {
 
-        //打开注册页面
-        RegisterPage registerPage = new RegisterPage();
-        registerPage.setRegisterCallback(new EventHandler() {
-            public void afterEvent(int event, int result, Object data) {
-                // 解析注册结果
-                if (result == SMSSDK.RESULT_COMPLETE) {
-                    @SuppressWarnings("unchecked")
-                    HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
-                    String country = (String) phoneMap.get("country");
-                    String phone = (String) phoneMap.get("phone");
-
-                    Log.e(TAG,phone);
-
-                    Intent it = new Intent(LoginActivity.this, SignUpActivity.class);
-
-                    it.putExtra("phone",phone);
-                    startActivity(it);
-                }
-            }
-        });
-        registerPage.show(this);
-
-    }
 
 }

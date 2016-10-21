@@ -3,5 +3,7 @@
     
     <string name="sms_appkey">182ce611c7128</string>
     <string name="sms_appsecret">ee69407856446a94bb56999c693b0928</string>
+
+    <string name="loading">正在加载</string>
     
 </resources>
