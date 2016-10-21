@@ -80,8 +80,18 @@ public class SignUpActivity extends BaseActivity {
 
     }
 
+    /**
+     * 注册结果处理
+     * @param mineStateSelfResult 注册结果信息
+     */
     public void signUpResult(SelfResult<MineState> mineStateSelfResult) {
 
+        if (mineStateSelfResult == null) {
+            dialog.dismiss();
+            btnSignUp.setEnabled(true);
+            SnackBarUtils.makeShort(btnSignUp, mineStateSelfResult.getError()).danger();
+            return;
+        }
 
         if (mineStateSelfResult.isSuccess()) {
             dialog.setMessage("正在登录...");
@@ -96,6 +106,10 @@ public class SignUpActivity extends BaseActivity {
 
     }
 
+    /**
+     * 处理登录结果
+     * @param message 结果信息
+     */
     public void loginResult(String message) {
 
         dialog.dismiss();
@@ -113,6 +127,9 @@ public class SignUpActivity extends BaseActivity {
 
     }
 
+    /**
+     * 注册按钮点击事件处理
+     */
     @OnClick(R.id.btn_signup)
     public void signUp() {
 
@@ -121,6 +138,8 @@ public class SignUpActivity extends BaseActivity {
         imm.hideSoftInputFromWindow(btnSignUp.getWindowToken(), 0);
 
         btnSignUp.setEnabled(false);
+
+        phone = phone.trim();
 
         String userName = inputName.getText().toString();
 
@@ -153,6 +172,9 @@ public class SignUpActivity extends BaseActivity {
 
     }
 
+    /**
+     * 前往登录按钮点击事件处理
+     */
     @OnClick(R.id.link_login)
     public void login() {
 
@@ -160,6 +182,9 @@ public class SignUpActivity extends BaseActivity {
         finish();
     }
 
+    /**
+     * 注入
+     */
     private void inject() {
 
         AppComponent appComponent = ((TripApplication) getApplication()).getAppComponent();
@@ -170,6 +195,9 @@ public class SignUpActivity extends BaseActivity {
 
     }
 
+    /**
+     * 初始化组件
+     */
     private void initView() {
 
 

@@ -47,11 +47,12 @@ public class SignUpPresenter {
         gson = new Gson();
     }
 
-    public void phoneLogin(Long phone,String passwd){
+    public void phoneLogin(final Long phone, String passwd){
 
         passwd = DigestUtils.md5Hex(passwd);
 
-        userApi.phoneLogin(phone,passwd)
+        final String finalPasswd = passwd;
+        userApi.phoneLogin(phone,finalPasswd)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<SelfResult<Token>>() {
@@ -63,6 +64,7 @@ public class SignUpPresenter {
                     @Override
                     public void onError(Throwable e) {
                         Log.e(TAG,e.getMessage());
+                        activity.loginResult("网络错误");
 
                     }
 
@@ -80,6 +82,8 @@ public class SignUpPresenter {
                             String json = gson.toJson(tokenSelfResult.getData(),Token.class);
 
                             map.put("token",json);
+                            map.put("phone",phone + "");
+                            map.put("passwd", finalPasswd);
                             SharedPreferencesUtils.saveTakon(activity,map);
                             message = "1";
 
@@ -116,6 +120,8 @@ public class SignUpPresenter {
                     public void onError(Throwable e) {
 
                         Log.e(TAG,e.getMessage(),e);
+
+                        activity.signUpResult(null);
 
                     }
 

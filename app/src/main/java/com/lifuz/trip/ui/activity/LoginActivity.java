@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.support.v7.widget.AppCompatButton;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.method.HideReturnsTransformationMethod;
@@ -56,6 +57,9 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.login_passwd_et)
     protected PasswdEditText login_passwd_et;
 
+    @BindView(R.id.login_btn)
+    AppCompatButton btnLogin;
+
     @BindView(R.id.link_signup)
     protected TextView linkSignUp;
 
@@ -64,7 +68,7 @@ public class LoginActivity extends BaseActivity {
     @Inject
     LoginPresenter loginPresenter;
 
-    private ProgressDialog progressDialog;
+    private CustomDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,21 +84,74 @@ public class LoginActivity extends BaseActivity {
 
     }
 
+    public void loginResult(String message) {
+        dialog.dismiss();
+        btnLogin.setEnabled(true);
+        if (message.isEmpty()){
+            SnackBarUtils.makeShort(btnLogin,"网络错误");
+            return;
+        }
+
+        if (message.equals("1")) {
+
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+
+        } else {
+            SnackBarUtils.makeShort(btnLogin, message);
+            return;
+        }
+
+    }
+
+    /**
+     * 登录按钮点击事件处理
+     */
     @OnClick(R.id.login_btn)
     public void login(){
+
+        btnLogin.setEnabled(false);
 
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         imm.hideSoftInputFromWindow(login_phone_et.getWindowToken(), 0);
 
-        CustomDialog customDialog = new CustomDialog(this,R.style.CustomDialog);
-        customDialog.setMessage("正在登录...");
-        customDialog.show();
-        customDialog.setMessage("正在注册");
+        dialog = new CustomDialog(this,R.style.CustomDialog);
+        dialog.setMessage("正在登录...");
+        dialog.show();
+
+        String phone = login_phone_et.getText().toString();
+        phone = phone.trim();
+
+        if (phone.isEmpty()) {
+            SnackBarUtils.makeShort(btnLogin,"手机号不能为空").danger();
+            btnLogin.setEnabled(true);
+            return;
+
+        }
+
+        String passwd = login_passwd_et.getText().toString();
+
+        if (passwd.isEmpty()) {
+            SnackBarUtils.makeShort(btnLogin,"密码不能为空");
+            btnLogin.setEnabled(true);
+            return;
+
+        }
+
+        if (passwd.length() < 6 || passwd.length() > 20) {
+            SnackBarUtils.makeShort(btnLogin, "密码长度为6-20个字符").danger();
+            btnLogin.setEnabled(true);
+            return;
+        }
+
+        loginPresenter.phoneLogin(Long.parseLong(phone),passwd);
 
 
     }
 
+    /**
+     * 注册按钮点击事件处理
+     */
     @OnClick(R.id.link_signup)
     public void signUp() {
 
@@ -134,6 +191,9 @@ public class LoginActivity extends BaseActivity {
 
     }
 
+    /**
+     * 初始化组件
+     */
     private void initView() {
 
 
@@ -188,6 +248,9 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dialog.dismiss();
+    }
 }
