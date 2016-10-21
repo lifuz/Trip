@@ -6,20 +6,25 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.v7.widget.Toolbar;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.lifuz.trip.R;
+import com.lifuz.trip.application.AppComponent;
+import com.lifuz.trip.application.TripApplication;
+import com.lifuz.trip.ui.component.DaggerLoginComponent;
+import com.lifuz.trip.ui.module.LoginModule;
+import com.lifuz.trip.ui.presenter.LoginPresenter;
 import com.lifuz.trip.ui.widget.PasswdEditText;
 
 import java.util.HashMap;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,8 +54,10 @@ public class LoginActivity extends BaseActivity {
     @BindView(R.id.link_signup)
     protected TextView linkSignUp;
 
-
     private boolean passwdFlag = true;
+
+    @Inject
+    LoginPresenter loginPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +68,19 @@ public class LoginActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initView();
+
+        inject();
+
+    }
+
+    private void inject() {
+
+        AppComponent appComponent = ((TripApplication) getApplication()).getAppComponent();
+
+        DaggerLoginComponent.builder()
+                .appComponent(appComponent)
+                .loginModule(new LoginModule(this))
+                .build().inject(this);
 
     }
 
@@ -132,8 +152,12 @@ public class LoginActivity extends BaseActivity {
                     String country = (String) phoneMap.get("country");
                     String phone = (String) phoneMap.get("phone");
 
-                    // 提交用户信息（此方法可以不调用）
-                    startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+                    Log.e(TAG,phone);
+
+                    Intent it = new Intent(LoginActivity.this, SignUpActivity.class);
+
+                    it.putExtra("phone",phone);
+                    startActivity(it);
                 }
             }
         });

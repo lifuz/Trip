@@ -12,6 +12,10 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.lifuz.trip.R;
+import com.lifuz.trip.application.AppComponent;
+import com.lifuz.trip.application.TripApplication;
+import com.lifuz.trip.ui.component.DaggerSignUpComponent;
+import com.lifuz.trip.ui.module.SignUpModule;
 import com.lifuz.trip.ui.widget.PasswdEditText;
 
 import butterknife.BindView;
@@ -44,6 +48,18 @@ public class SignUpActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initView();
+
+        inject();
+
+    }
+
+    private void inject() {
+
+        AppComponent appComponent = ((TripApplication) getApplication()).getAppComponent();
+
+        DaggerSignUpComponent.builder().appComponent(appComponent)
+                .signUpModule(new SignUpModule(this))
+                .build().inject(this);
 
     }
 
