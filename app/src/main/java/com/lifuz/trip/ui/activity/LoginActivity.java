@@ -25,6 +25,7 @@ import com.lifuz.trip.ui.module.LoginModule;
 import com.lifuz.trip.ui.presenter.LoginPresenter;
 import com.lifuz.trip.ui.widget.CustomDialog;
 import com.lifuz.trip.ui.widget.PasswdEditText;
+import com.lifuz.trip.utils.SnackBarUtils;
 
 import java.util.HashMap;
 
@@ -89,6 +90,7 @@ public class LoginActivity extends BaseActivity {
         CustomDialog customDialog = new CustomDialog(this,R.style.CustomDialog);
         customDialog.setMessage("正在登录...");
         customDialog.show();
+        customDialog.setMessage("正在注册");
 
 
     }
@@ -113,6 +115,7 @@ public class LoginActivity extends BaseActivity {
 
                     it.putExtra("phone",phone);
                     startActivity(it);
+                    finish();
                 }
             }
         });

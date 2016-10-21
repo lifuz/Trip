@@ -69,5 +69,12 @@ public class CustomDialog extends ProgressDialog {
 
     public void setMessage(String message) {
         this.message = message;
+
+        if (loadText != null) {
+            if (null != message && !"".equals(message)) {
+
+                loadText.setText(message);
+            }
+        }
     }
 }
