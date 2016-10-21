@@ -21,11 +21,13 @@ import android.widget.TextView;
 import com.lifuz.trip.R;
 import com.lifuz.trip.application.AppComponent;
 import com.lifuz.trip.application.TripApplication;
+import com.lifuz.trip.module.mine.Token;
 import com.lifuz.trip.ui.component.DaggerLoginComponent;
 import com.lifuz.trip.ui.module.LoginModule;
 import com.lifuz.trip.ui.presenter.LoginPresenter;
 import com.lifuz.trip.ui.widget.CustomDialog;
 import com.lifuz.trip.ui.widget.PasswdEditText;
+import com.lifuz.trip.utils.SharedPreferencesUtils;
 import com.lifuz.trip.utils.SnackBarUtils;
 
 import java.util.HashMap;
@@ -78,6 +80,13 @@ public class LoginActivity extends BaseActivity {
 
         ButterKnife.bind(this);
 
+        Token token = SharedPreferencesUtils.getToken(this);
+
+        if(token !=null) {
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+        }
+
         initView();
 
         inject();
@@ -95,6 +104,7 @@ public class LoginActivity extends BaseActivity {
         if (message.equals("1")) {
 
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
 
         } else {
             SnackBarUtils.makeShort(btnLogin, message);
@@ -251,6 +261,10 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        dialog.dismiss();
+
+        if (dialog != null) {
+
+            dialog.dismiss();
+        }
     }
 }

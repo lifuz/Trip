@@ -249,7 +249,10 @@ public class SignUpActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        dialog.dismiss();
+        if (dialog != null) {
+
+            dialog.dismiss();
+        }
 
     }
 }
