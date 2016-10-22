@@ -1,7 +1,6 @@
 package com.lifuz.trip.ui.activity;
 
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
