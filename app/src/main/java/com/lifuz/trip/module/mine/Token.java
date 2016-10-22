@@ -23,4 +23,6 @@ public class Token {
     //过期时间
     private Long expire;
 
+    private Long userId;
+
 }

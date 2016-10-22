@@ -41,9 +41,9 @@ public class BaseActivity extends AppCompatActivity {
                     Manifest.permission.READ_PHONE_STATE);
             int checkREADSMS = ContextCompat.checkSelfPermission(this,
                     Manifest.permission.READ_SMS);
-
-            int checkREADCONTACTS = ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.READ_CONTACTS);
+//
+//            int checkREADCONTACTS = ContextCompat.checkSelfPermission(this,
+//                    Manifest.permission.READ_CONTACTS);
 
             int checkWRITEEXTERNALSTORAGE = ContextCompat.checkSelfPermission(this,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -54,7 +54,7 @@ public class BaseActivity extends AppCompatActivity {
 
             String[] permissions = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
                     Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE,
-                    Manifest.permission.READ_SMS,Manifest.permission.READ_CONTACTS,
+                    Manifest.permission.READ_SMS,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.RECEIVE_SMS};
 
             //如果没有授权，则调用授权方法
@@ -62,7 +62,7 @@ public class BaseActivity extends AppCompatActivity {
                     || checkACCESSFINELOCATION != PackageManager.PERMISSION_GRANTED
                     || checkREADPHONESTATE != PackageManager.PERMISSION_GRANTED
                     || checkREADSMS != PackageManager.PERMISSION_GRANTED
-                    || checkREADCONTACTS != PackageManager.PERMISSION_GRANTED
+//                    || checkREADCONTACTS != PackageManager.PERMISSION_GRANTED
                     || checkWRITEEXTERNALSTORAGE != PackageManager.PERMISSION_GRANTED
                     || checkRECEIVESMS != PackageManager.PERMISSION_GRANTED
                     ) {
@@ -93,7 +93,7 @@ public class BaseActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_CODE:
 
-                Log.e(TAG, grantResults[0] + "  " + grantResults[1] + "  " + PackageManager.PERMISSION_GRANTED);
+                Log.e(TAG, grantResults[0] + "  " + grantResults[4] + "  " + PackageManager.PERMISSION_GRANTED);
 
                 break;
         }

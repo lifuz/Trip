@@ -3,10 +3,12 @@ package com.lifuz.trip.api.mine;
 import com.lifuz.trip.enums.MineState;
 import com.lifuz.trip.module.common.SelfResult;
 import com.lifuz.trip.module.mine.Token;
+import com.lifuz.trip.module.mine.User;
 
 import java.util.Map;
 
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -22,6 +24,9 @@ import rx.Observable;
  * 时间：2016/10/20 16:43
  */
 public interface UserApi {
+
+    @GET("appUser/{userId}/user")
+    Observable<SelfResult<User>> getUser(@Path("userId") Long userId,@Header("Authorization") String token);
 
     /**
      * 用户注册接口

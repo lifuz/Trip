@@ -78,8 +78,6 @@ public class LoginPresenter {
                             String json = gson.toJson(tokenSelfResult.getData(),Token.class);
 
                             map.put("token",json);
-                            map.put("phone",phone + "");
-                            map.put("passwd", finalPasswd);
                             SharedPreferencesUtils.saveTakon(activity,map);
                             message = "1";
 
