@@ -96,7 +96,7 @@ public class LoginActivity extends BaseActivity {
         dialog.dismiss();
         btnLogin.setEnabled(true);
         if (message.isEmpty()){
-            SnackBarUtils.makeShort(btnLogin,"网络错误");
+            SnackBarUtils.makeShort(btnLogin,"网络错误").danger();
             return;
         }
 
@@ -106,7 +106,7 @@ public class LoginActivity extends BaseActivity {
             finish();
 
         } else {
-            SnackBarUtils.makeShort(btnLogin, message);
+            SnackBarUtils.makeShort(btnLogin, message).danger();
             return;
         }
 

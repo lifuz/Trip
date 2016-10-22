@@ -18,7 +18,7 @@ import android.widget.EditText;
 import com.lifuz.trip.R;
 import com.lifuz.trip.application.AppComponent;
 import com.lifuz.trip.application.TripApplication;
-import com.lifuz.trip.enums.MineState;
+import com.lifuz.trip.enums.SelfState;
 import com.lifuz.trip.module.common.SelfResult;
 import com.lifuz.trip.ui.component.DaggerSignUpComponent;
 import com.lifuz.trip.ui.module.SignUpModule;
@@ -84,7 +84,7 @@ public class SignUpActivity extends BaseActivity {
      * 注册结果处理
      * @param mineStateSelfResult 注册结果信息
      */
-    public void signUpResult(SelfResult<MineState> mineStateSelfResult) {
+    public void signUpResult(SelfResult<SelfState> mineStateSelfResult) {
 
         if (mineStateSelfResult == null) {
             dialog.dismiss();

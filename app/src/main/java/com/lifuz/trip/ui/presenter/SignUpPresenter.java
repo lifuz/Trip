@@ -1,20 +1,17 @@
 package com.lifuz.trip.ui.presenter;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.lifuz.trip.api.mine.UserApi;
-import com.lifuz.trip.enums.MineState;
+import com.lifuz.trip.enums.SelfState;
 import com.lifuz.trip.module.common.SelfResult;
 import com.lifuz.trip.module.mine.Token;
 import com.lifuz.trip.ui.activity.SignUpActivity;
 import com.lifuz.trip.utils.SharedPreferencesUtils;
 
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.security.MessageDigest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -108,7 +105,7 @@ public class SignUpPresenter {
         userApi.register(map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<SelfResult<MineState>>() {
+                .subscribe(new Observer<SelfResult<SelfState>>() {
                     @Override
                     public void onCompleted() {
 
@@ -124,7 +121,7 @@ public class SignUpPresenter {
                     }
 
                     @Override
-                    public void onNext(SelfResult<MineState> mineStateSelfResult) {
+                    public void onNext(SelfResult<SelfState> mineStateSelfResult) {
                         Log.e(TAG,mineStateSelfResult.toString());
 
                         activity.signUpResult(mineStateSelfResult);
