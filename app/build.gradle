@@ -86,11 +86,11 @@ dependencies {
      *  对话框特效
      */
     compile 'com.github.florent37:materialtextfield:1.0.6'
+
     compile name: 'SMSSDK-2.1.2', ext: 'aar'
     compile name: 'SMSSDKGUI-2.1.2', ext: 'aar'
-    compile 'commons-codec:commons-codec:20041127.091804'
 
-    compile 'com.mostafagazar:customshapeimageview:1.0.4'
+    compile 'commons-codec:commons-codec:20041127.091804'
 
     compile 'com.squareup.picasso:picasso:2.5.2'
 }

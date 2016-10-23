@@ -39,7 +39,6 @@ import com.lifuz.trip.utils.CircleTransform;
 import com.lifuz.trip.utils.SharedPreferencesUtils;
 import com.lifuz.trip.utils.SnackBarUtils;
 import com.lifuz.trip.utils.StringUtils;
-import com.meg7.widget.CustomShapeImageView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -151,12 +150,12 @@ public class MineFragment extends BaseFragment {
 
             centerTitle.setText(user.getUserName());
 
-            Picasso.with(getContext())
-                    .load(getString(R.string.base_image_url )+ user.getUserHeadPortrait()).transform(new CircleTransform())
-                    .into(ivHead);
+            if (user.getUserHeadPortrait() != null) {
 
-
-
+                Picasso.with(getContext())
+                        .load(getString(R.string.base_image_url) + user.getUserHeadPortrait()).transform(new CircleTransform())
+                        .into(ivHead);
+            }
 
         } else {
             if ("1".equals(selfResult.getError())) {
@@ -170,12 +169,13 @@ public class MineFragment extends BaseFragment {
 
     /**
      * 更新头像结果
+     *
      * @param selfState 状态码
-     * @param error 错误信息
+     * @param error     错误信息
      */
-    public void updateUrl(SelfState selfState,String error){
+    public void updateUrl(SelfState selfState, String error) {
 
-        if (!StringUtils.isEmpty(error)){
+        if (!StringUtils.isEmpty(error)) {
 
             if ("1".equals(error)) {
                 startActivity(new Intent(getActivity(), LoginActivity.class));
@@ -189,7 +189,7 @@ public class MineFragment extends BaseFragment {
         if (selfState.getState() == 202) {
             Picasso.with(getContext()).load(new File("/sdcard/trip/image/head.png")).transform(new CircleTransform()).into(ivHead);
         } else {
-            SnackBarUtils.makeLong(toolbar,selfState.getStateInfo()).danger();
+            SnackBarUtils.makeLong(toolbar, selfState.getStateInfo()).danger();
             return;
         }
 
