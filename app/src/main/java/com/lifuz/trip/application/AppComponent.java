@@ -2,6 +2,7 @@ package com.lifuz.trip.application;
 
 import com.lifuz.trip.api.ApiService;
 import com.lifuz.trip.api.mine.UserApi;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Singleton;
 
@@ -27,6 +28,8 @@ public interface AppComponent {
     OkHttpClient getClient();
 
     Retrofit getRetrofit();
+
+    Picasso getPicasso();
 
     UserApi getUserApi();
 

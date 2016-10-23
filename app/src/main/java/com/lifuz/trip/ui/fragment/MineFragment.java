@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -34,10 +35,12 @@ import com.lifuz.trip.ui.activity.LoginActivity;
 import com.lifuz.trip.ui.component.DaggerMineComponent;
 import com.lifuz.trip.ui.module.MineModule;
 import com.lifuz.trip.ui.presenter.MinePresenter;
+import com.lifuz.trip.utils.CircleTransform;
 import com.lifuz.trip.utils.SharedPreferencesUtils;
 import com.lifuz.trip.utils.SnackBarUtils;
 import com.lifuz.trip.utils.StringUtils;
 import com.meg7.widget.CustomShapeImageView;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -74,7 +77,7 @@ public class MineFragment extends BaseFragment {
     MinePresenter minePresenter;
 
     @BindView(R.id.iv_head)
-    CustomShapeImageView ivHead;
+    ImageView ivHead;
 
 
     private RelativeLayout layout_choose;
@@ -116,6 +119,8 @@ public class MineFragment extends BaseFragment {
 
         inject();
 
+        Picasso.with(getContext()).load(R.drawable.test).transform(new CircleTransform()).into(ivHead);
+
         //获取用户信息
         minePresenter.getUser(getContext());
 
@@ -129,100 +134,6 @@ public class MineFragment extends BaseFragment {
 
         showMyDialog();
 
-    }
-
-    private void showMyDialog() {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.pop_head_dialog,
-                null);
-        layout_choose = (RelativeLayout) view.findViewById(R.id.layout_choose);
-        layout_photo = (RelativeLayout) view.findViewById(R.id.layout_photo);
-        layout_close = (RelativeLayout) view.findViewById(R.id.layout_close);
-
-        layout_choose.setBackgroundColor(getResources().getColor(
-                R.color.icons));
-        layout_photo.setBackgroundDrawable(getResources().getDrawable(
-                R.color.icons));
-        layout_close.setBackgroundColor(getResources().getColor(
-                R.color.icons));
-
-
-        layout_photo.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                // TODO Auto-generated method stub
-                layout_choose.setBackgroundColor(getResources().getColor(
-                        R.color.icons));
-                layout_photo.setBackgroundDrawable(getResources().getDrawable(
-                        R.drawable.pop_bg_press));
-                layout_close.setBackgroundColor(getResources().getColor(
-                        R.color.icons));
-
-
-                openCamera();
-                avatorPop.dismiss();
-
-            }
-        });
-
-        layout_choose.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                // TODO Auto-generated method stub
-                layout_photo.setBackgroundColor(getResources().getColor(
-                        R.color.icons));
-                layout_choose.setBackgroundDrawable(getResources().getDrawable(
-                        R.drawable.pop_bg_press));
-                layout_close.setBackgroundColor(getResources().getColor(
-                        R.color.icons));
-                openPic();
-                avatorPop.dismiss();
-
-            }
-        });
-
-        layout_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                layout_photo.setBackgroundColor(getResources().getColor(
-                        R.color.icons));
-                layout_close.setBackgroundDrawable(getResources().getDrawable(
-                        R.drawable.pop_bg_press));
-                layout_choose.setBackgroundColor(getResources().getColor(
-                        R.color.icons));
-                avatorPop.dismiss();
-            }
-        });
-
-
-        DisplayMetrics metric = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metric);
-        mScreenWidth = metric.widthPixels;
-        avatorPop = new PopupWindow(view, mScreenWidth, 200);
-        avatorPop.setTouchInterceptor(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-                    avatorPop.dismiss();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-
-        avatorPop.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
-        avatorPop.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        avatorPop.setTouchable(true);
-        avatorPop.setFocusable(true);
-
-//        avatorPop.setFocusable();
-        avatorPop.setOutsideTouchable(true);
-        avatorPop.setBackgroundDrawable(new BitmapDrawable());
-        // 动画效果 从底部弹起
-        avatorPop.setAnimationStyle(R.style.Animations_GrowFromBottom);
-        avatorPop.showAtLocation(layout_all, Gravity.BOTTOM, 0, 0);
     }
 
     /**
@@ -239,6 +150,12 @@ public class MineFragment extends BaseFragment {
             User user = selfResult.getData();
 
             centerTitle.setText(user.getUserName());
+
+            Picasso.with(getContext())
+                    .load(getString(R.string.base_image_url )+ user.getUserHeadPortrait()).transform(new CircleTransform())
+                    .into(ivHead);
+
+
 
 
         } else {
@@ -270,7 +187,7 @@ public class MineFragment extends BaseFragment {
         }
 
         if (selfState.getState() == 202) {
-            ivHead.setImageBitmap(mBitmap);
+            Picasso.with(getContext()).load(new File("/sdcard/trip/image/head.png")).transform(new CircleTransform()).into(ivHead);
         } else {
             SnackBarUtils.makeLong(toolbar,selfState.getStateInfo()).danger();
             return;
@@ -421,6 +338,100 @@ public class MineFragment extends BaseFragment {
         intent.putExtra("noFaceDetection", true);
         startActivityForResult(intent, REQUESTCODE_CUT);
 
+    }
+
+    private void showMyDialog() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.pop_head_dialog,
+                null);
+        layout_choose = (RelativeLayout) view.findViewById(R.id.layout_choose);
+        layout_photo = (RelativeLayout) view.findViewById(R.id.layout_photo);
+        layout_close = (RelativeLayout) view.findViewById(R.id.layout_close);
+
+        layout_choose.setBackgroundColor(getResources().getColor(
+                R.color.icons));
+        layout_photo.setBackgroundDrawable(getResources().getDrawable(
+                R.color.icons));
+        layout_close.setBackgroundColor(getResources().getColor(
+                R.color.icons));
+
+
+        layout_photo.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                layout_choose.setBackgroundColor(getResources().getColor(
+                        R.color.icons));
+                layout_photo.setBackgroundDrawable(getResources().getDrawable(
+                        R.drawable.pop_bg_press));
+                layout_close.setBackgroundColor(getResources().getColor(
+                        R.color.icons));
+
+
+                openCamera();
+                avatorPop.dismiss();
+
+            }
+        });
+
+        layout_choose.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                // TODO Auto-generated method stub
+                layout_photo.setBackgroundColor(getResources().getColor(
+                        R.color.icons));
+                layout_choose.setBackgroundDrawable(getResources().getDrawable(
+                        R.drawable.pop_bg_press));
+                layout_close.setBackgroundColor(getResources().getColor(
+                        R.color.icons));
+                openPic();
+                avatorPop.dismiss();
+
+            }
+        });
+
+        layout_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layout_photo.setBackgroundColor(getResources().getColor(
+                        R.color.icons));
+                layout_close.setBackgroundDrawable(getResources().getDrawable(
+                        R.drawable.pop_bg_press));
+                layout_choose.setBackgroundColor(getResources().getColor(
+                        R.color.icons));
+                avatorPop.dismiss();
+            }
+        });
+
+
+        DisplayMetrics metric = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(metric);
+        mScreenWidth = metric.widthPixels;
+        avatorPop = new PopupWindow(view, mScreenWidth, 200);
+        avatorPop.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                    avatorPop.dismiss();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+        avatorPop.setWidth(WindowManager.LayoutParams.MATCH_PARENT);
+        avatorPop.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        avatorPop.setTouchable(true);
+        avatorPop.setFocusable(true);
+
+//        avatorPop.setFocusable();
+        avatorPop.setOutsideTouchable(true);
+        avatorPop.setBackgroundDrawable(new BitmapDrawable());
+        // 动画效果 从底部弹起
+        avatorPop.setAnimationStyle(R.style.Animations_GrowFromBottom);
+        avatorPop.showAtLocation(layout_all, Gravity.BOTTOM, 0, 0);
     }
 
 

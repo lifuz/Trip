@@ -11,6 +11,7 @@ import java.util.Map;
 import okhttp3.MultipartBody;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -30,11 +31,13 @@ import rx.Observable;
  */
 public interface UserApi {
 
+    @Headers("Cache-Control: max-age=0")
     @Multipart
     @POST("appUser/{userId}/update")
     Observable<SelfState> updateHead(@Path("userId") Long userId, @Header("Authorization") String token
             , @Part MultipartBody.Part file);
 
+    @Headers("Cache-Control: max-age=0")
     @GET("appUser/{userId}/user")
     Observable<SelfResult<User>> getUser(@Path("userId") Long userId, @Header("Authorization") String token);
 
@@ -44,6 +47,7 @@ public interface UserApi {
      * @param map 用户信息
      * @return 注册结果
      */
+    @Headers("Cache-Control: max-age=0")
     @POST("appUser/register")
     Observable<SelfResult<SelfState>> register(@QueryMap Map<String, String> map);
 
@@ -54,6 +58,7 @@ public interface UserApi {
      * @param passwd 密码
      * @return 登录结果
      */
+    @Headers("Cache-Control: max-age=0")
     @GET("appUser/{phone}/phoneLogin")
     Observable<SelfResult<Token>> phoneLogin(
             @Path("phone") Long phone, @Query("passwd") String passwd);
@@ -64,6 +69,7 @@ public interface UserApi {
      * @param userId
      * @return
      */
+    @Headers("Cache-Control: max-age=0")
     @GET("appUser/{userId}/userId")
     Observable<SelfResult<Token>> userId(@Path("userId") String userId);
 

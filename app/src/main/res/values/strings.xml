@@ -9,5 +9,7 @@
     <string name="pop_photo">拍照</string>
     <string name="pop_choose">从相册中选择</string>
     <string name="pop_close">取消</string>
+
+    <string name="base_image_url">http://121.41.64.237/image/</string>
     
 </resources>

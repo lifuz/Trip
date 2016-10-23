@@ -1,6 +1,7 @@
 package com.lifuz.trip.application;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.lifuz.trip.R;
 import com.lifuz.trip.api.ApiService;
@@ -18,9 +19,13 @@ public class TripApplication extends Application {
 
     private AppComponent appComponent;
 
+    private static Context context = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        context = this;
 
         SMSSDK.initSDK(this, getString(R.string.sms_appkey), getString(R.string.sms_appsecret));
 
@@ -28,6 +33,10 @@ public class TripApplication extends Application {
                 .apiService(new ApiService())
                 .build();
 
+    }
+
+    public static Context getContext() {
+        return context;
     }
 
     public AppComponent getAppComponent() {
