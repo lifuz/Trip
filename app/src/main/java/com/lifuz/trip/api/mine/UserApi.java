@@ -5,7 +5,6 @@ import com.lifuz.trip.module.common.SelfResult;
 import com.lifuz.trip.module.mine.Token;
 import com.lifuz.trip.module.mine.User;
 
-import java.io.File;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -31,12 +30,37 @@ import rx.Observable;
  */
 public interface UserApi {
 
+    /**
+     * 签到接口
+     * @param userId 用户id
+     * @param token token值
+     * @param msg 签到信息
+     * @return 签到结果
+     */
+    @Headers("Cache-Control: max-age=0")
+    @PUT("appUser/{userId}/sign")
+    Observable<SelfState> sgin(@Path("userId") Long userId,@Header("Authorization") String token,
+                               @Query("msg") String msg);
+
+    /**
+     * 更新头像接口
+     * @param userId 用户id
+     * @param token token值
+     * @param file 头像文件
+     * @return 更新结果
+     */
     @Headers("Cache-Control: max-age=0")
     @Multipart
     @POST("appUser/{userId}/update")
     Observable<SelfState> updateHead(@Path("userId") Long userId, @Header("Authorization") String token
             , @Part MultipartBody.Part file);
 
+    /**
+     * 获取用户信息
+     * @param userId 用户id
+     * @param token token值
+     * @return 用户信息结果
+     */
     @Headers("Cache-Control: max-age=0")
     @GET("appUser/{userId}/user")
     Observable<SelfResult<User>> getUser(@Path("userId") Long userId, @Header("Authorization") String token);

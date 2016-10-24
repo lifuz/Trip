@@ -50,6 +50,82 @@ public class MinePresenter {
         this.userApi = userApi;
     }
 
+    public void sgin(final Context context, final String msg){
+        final Token token = SharedPreferencesUtils.getToken(context);
+
+        if (token == null) {
+
+            return;
+        }
+
+        Observable.just(null)
+                .flatMap(new Func1<Object, Observable<SelfState>>() {
+                    @Override
+                    public Observable<SelfState> call(Object o) {
+                        if (token.getToken() == null) {
+
+                            return Observable.error(new NullPointerException("token is null!!"));
+                        } else if (System.currentTimeMillis() / 1000 > token.getExpire()) {
+                            return Observable.error(new IllegalArgumentException("token is expires!!"));
+                        } else {
+
+                            return userApi.sgin(token.getUserId(),token.getToken(),msg);
+                        }
+                    }
+                }).retryWhen(new Func1<Observable<? extends Throwable>, Observable<?>>() {
+            @Override
+            public Observable<?> call(Observable<? extends Throwable> observable) {
+                return observable.flatMap(new Func1<Throwable, Observable<?>>() {
+                    @Override
+                    public Observable<?> call(Throwable throwable) {
+                        if (throwable instanceof NullPointerException || throwable instanceof IllegalArgumentException) {
+                            return userApi.userId(token.getUserId() + "")
+                                    .doOnNext(new Action1<SelfResult<Token>>() {
+                                        @Override
+                                        public void call(SelfResult<Token> tokenSelfResult) {
+                                            if (tokenSelfResult.isSuccess()) {
+
+                                                Token newToken = tokenSelfResult.getData();
+
+                                                token.setExpire(newToken.getExpire());
+                                                token.setToken(newToken.getToken());
+
+                                                Map<String, String> map = new HashMap<>();
+
+                                                String json = gson.toJson(tokenSelfResult.getData(), Token.class);
+
+                                                map.put("token", json);
+                                                SharedPreferencesUtils.saveTakon(context, map);
+
+                                            }
+
+                                        }
+                                    });
+                        }
+                        return Observable.error(throwable);
+                    }
+                });
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<SelfState>() {
+                    @Override
+                    public void call(SelfState selfState) {
+                        Log.e(TAG, selfState.toString());
+
+//                        fragment.updateUrl(selfState, null);
+
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.e(TAG, throwable.getMessage());
+
+//                        fragment.updateUrl(null, throwable.getMessage());
+
+                    }
+                });
+    }
+
     public void updateHead(final Context context, final File file) {
 
         final Token token = SharedPreferencesUtils.getToken(context);
