@@ -187,7 +187,8 @@ public class MineFragment extends BaseFragment {
         }
 
         if (selfState.getState() == 202) {
-            Picasso.with(getContext()).load(new File("/sdcard/trip/image/head.png")).transform(new CircleTransform()).into(ivHead);
+            Picasso.with(getContext()).load(new File("/sdcard/trip/image/head.png"))
+                    .transform(new CircleTransform()).into(ivHead);
         } else {
             SnackBarUtils.makeLong(toolbar, selfState.getStateInfo()).danger();
             return;
@@ -306,9 +307,13 @@ public class MineFragment extends BaseFragment {
                 e.printStackTrace();
             } finally {
                 try {
-                    // 关闭流
-                    b.flush();
-                    b.close();
+
+                    if ( b != null) {
+                        // 关闭流
+                        b.flush();
+                        b.close();
+                    }
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

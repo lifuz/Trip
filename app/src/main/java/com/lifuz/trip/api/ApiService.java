@@ -5,6 +5,7 @@ import com.lifuz.trip.application.TripApplication;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
@@ -46,6 +47,8 @@ public class ApiService {
                 .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .addNetworkInterceptor(new CaheInterceptor())
                 .cache(new Cache(file, 1024 * 1024 * 100))
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60,TimeUnit.SECONDS)
                 .build();
     }
 
