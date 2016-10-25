@@ -57,6 +57,7 @@
 
         <activity android:name=".ui.activity.SignUpActivity"/>
         <activity android:name=".ui.activity.MainActivity"/>
+        <activity android:name=".ui.activity.EditUserActivity"/>
 
     </application>
 

@@ -34,6 +34,7 @@ import com.lifuz.trip.enums.SelfState;
 import com.lifuz.trip.module.common.SelfResult;
 import com.lifuz.trip.module.mine.User;
 import com.lifuz.trip.module.mine.UserExper;
+import com.lifuz.trip.ui.activity.EditUserActivity;
 import com.lifuz.trip.ui.activity.LoginActivity;
 import com.lifuz.trip.ui.component.DaggerMineComponent;
 import com.lifuz.trip.ui.module.MineModule;
@@ -93,6 +94,12 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.level_name)
     TextView levelName;
 
+    @BindView(R.id.tv_edit)
+    TextView tvEdit;
+
+    @BindView(R.id.tv_occu)
+    TextView tvOccu;
+
 
     private RelativeLayout layout_choose;
     private RelativeLayout layout_photo;
@@ -139,6 +146,13 @@ public class MineFragment extends BaseFragment {
         minePresenter.getUser(getContext());
 
         minePresenter.userExper(getContext());
+
+    }
+
+    @OnClick(R.id.tv_edit)
+    public void edit(){
+
+        startActivity(new Intent(getActivity(), EditUserActivity.class));
 
     }
 
@@ -236,6 +250,25 @@ public class MineFragment extends BaseFragment {
                 Picasso.with(getContext())
                         .load(getString(R.string.base_image_url) + user.getUserHeadPortrait()).transform(new CircleTransform())
                         .into(ivHead);
+            }
+
+            if (StringUtils.isEmpty(user.getSignature())) {
+
+                if (!StringUtils.isEmpty(user.getOccupation())){
+
+                    tvEdit.setText(user.getOccupation());
+                }
+
+            } else {
+
+                tvEdit.setText(user.getSignature());
+
+                if (!StringUtils.isEmpty(user.getOccupation())){
+
+                    tvOccu.setText(user.getOccupation());
+                    tvEdit.setVisibility(View.VISIBLE);
+                }
+
             }
 
         } else {

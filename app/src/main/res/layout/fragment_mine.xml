@@ -23,6 +23,7 @@
             android:src="@drawable/test" />
 
         <TextView
+            android:id="@+id/tv_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -33,6 +34,7 @@
             android:textSize="@dimen/second_text_size" />
 
         <TextView
+            android:id="@+id/tv_occu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

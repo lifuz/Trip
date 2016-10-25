@@ -24,11 +24,11 @@ public class User {
     //用户名
     private String userName;
 
-    //真实姓名
-    private String realName;
+    //签到
+    private String signature;
 
-    //qq登录id
-    private String qqOpenId;
+    //职业
+    private String occupation;
 
     //用户头像
     private String userHeadPortrait;

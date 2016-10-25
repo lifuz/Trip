@@ -32,6 +32,18 @@ import rx.Observable;
 public interface UserApi {
 
     /**
+     * 更新用户信息
+     * @param userId 用户id
+     * @param token token值
+     * @param map 用户信息map集合
+     * @return 更新结果
+     */
+    @Headers("Cache-Control: max-age=0")
+    @PUT("appUser/{userId}/update")
+    Observable<SelfState> updateUser(@Path("userId") Long userId, @Header("Authorization") String token
+            , @QueryMap Map<String, String> map);
+
+    /**
      * 获取用户的经验信息
      * @param userId 用户id
      * @param token token值
