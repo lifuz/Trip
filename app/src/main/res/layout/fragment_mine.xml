@@ -59,6 +59,95 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="@color/icons">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="经验等级:"
+                            android:textColor="@color/primary_dark"
+                            android:textSize="@dimen/second_text_size"
+                            android:layout_margin="8dp"/>
+
+                        <TextView
+                            android:id="@+id/level_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="新兵 ( lv 1)"
+                            android:textSize="@dimen/body_text_size"
+                            android:textColor="@color/primary"
+                            android:layout_margin="8dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="center"
+                        android:gravity="center">
+
+                        <ProgressBar
+                            android:id="@+id/level_progress"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:max="100"
+                            android:progress="0"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"/>
+
+                        <TextView
+                            android:id="@+id/level_exper"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0"
+                            android:textColor="@color/secondary_text"
+                            android:textSize="@dimen/micro_text_size"
+                            android:layout_marginBottom="8dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center">
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/btn_sign"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="已签到"
+                        android:background="@drawable/login_button_ripple"
+                        android:textSize="@dimen/second_text_size"
+                        android:textColor="@color/primary_text"
+                        android:layout_marginRight="8dp"
+                        android:enabled="false"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@color/icons"
                 android:orientation="horizontal"

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +33,7 @@ import com.lifuz.trip.application.TripApplication;
 import com.lifuz.trip.enums.SelfState;
 import com.lifuz.trip.module.common.SelfResult;
 import com.lifuz.trip.module.mine.User;
+import com.lifuz.trip.module.mine.UserExper;
 import com.lifuz.trip.ui.activity.LoginActivity;
 import com.lifuz.trip.ui.component.DaggerMineComponent;
 import com.lifuz.trip.ui.module.MineModule;
@@ -78,6 +81,18 @@ public class MineFragment extends BaseFragment {
     @BindView(R.id.iv_head)
     ImageView ivHead;
 
+    @BindView(R.id.btn_sign)
+    AppCompatButton btnSign;
+
+    @BindView(R.id.level_progress)
+    ProgressBar progressBar;
+
+    @BindView(R.id.level_exper)
+    TextView levelExper;
+
+    @BindView(R.id.level_name)
+    TextView levelName;
+
 
     private RelativeLayout layout_choose;
     private RelativeLayout layout_photo;
@@ -123,6 +138,40 @@ public class MineFragment extends BaseFragment {
         //获取用户信息
         minePresenter.getUser(getContext());
 
+        minePresenter.userExper(getContext());
+
+    }
+
+    /**
+     * 签到结果处理
+     * @param selfState 签到结果
+     */
+    public void sginResult(SelfState selfState) {
+
+        if (selfState.getState() == 204) {
+
+            SnackBarUtils.makeShort(toolbar,selfState.getStateInfo()).info();
+
+            minePresenter.userExper(getContext());
+
+        } else {
+
+            SnackBarUtils.makeShort(toolbar,selfState.getStateInfo()).danger();
+            btnSign.setEnabled(true);
+            btnSign.setText("签到");
+        }
+
+    }
+
+    /**
+     * 签到按钮点击事件
+     */
+    @OnClick(R.id.btn_sign)
+    public void clickSgin(){
+        minePresenter.sgin(getContext(),null);
+
+        btnSign.setEnabled(false);
+        btnSign.setText("签到中");
     }
 
     /**
@@ -132,6 +181,35 @@ public class MineFragment extends BaseFragment {
     public void clickHead() {
 
         showMyDialog();
+
+    }
+
+    /**
+     * 设置经验信息
+     * @param userExperSelfResult 经验相关信息
+     */
+    public void setUserExper(SelfResult<UserExper> userExperSelfResult) {
+
+        if (userExperSelfResult.isSuccess()) {
+
+            UserExper userExper = userExperSelfResult.getData();
+
+            levelName.setText(userExper.getExperLevelName()+" ( lv "+ userExper.getExperLevel() +")");
+
+            if (userExper.getStatus() == 0) {
+                btnSign.setEnabled(true);
+                btnSign.setText("签到");
+            } else {
+                btnSign.setEnabled(false);
+                btnSign.setText("已签到");
+            }
+
+            levelExper.setText (userExper.getExperValue() + "/" + userExper.getExperMaxValue());
+
+
+        } else {
+            SnackBarUtils.makeShort(ivHead,userExperSelfResult.getError()).danger();
+        }
 
     }
 

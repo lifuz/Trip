@@ -26,13 +26,19 @@ public class UserExper {
     private Long experValue;
 
     //用户等级
-    private String experLevel;
+    private Integer experLevel;
+
+    //用户等级名称
+    private String experLevelName;
 
     //当前等级最大经验值
     private Long experMaxValue;
 
     //等级图片
     private String experPic;
+
+    //当前签到状态
+    private Integer status;
 
     //修改时间
     private Date modifyTime;

@@ -4,6 +4,7 @@ import com.lifuz.trip.enums.SelfState;
 import com.lifuz.trip.module.common.SelfResult;
 import com.lifuz.trip.module.mine.Token;
 import com.lifuz.trip.module.mine.User;
+import com.lifuz.trip.module.mine.UserExper;
 
 import java.util.Map;
 
@@ -29,6 +30,16 @@ import rx.Observable;
  * 时间：2016/10/20 16:43
  */
 public interface UserApi {
+
+    /**
+     * 获取用户的经验信息
+     * @param userId 用户id
+     * @param token token值
+     * @return 用户经验信息
+     */
+    @Headers("Cache-Control: max-age=0")
+    @GET("appUser/{userId}/userExper")
+    Observable<SelfResult<UserExper>> getUserExper(@Path("userId") Long userId,@Header("Authorization") String token);
 
     /**
      * 签到接口

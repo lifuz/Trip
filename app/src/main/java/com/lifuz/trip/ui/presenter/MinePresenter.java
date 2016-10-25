@@ -9,6 +9,7 @@ import com.lifuz.trip.enums.SelfState;
 import com.lifuz.trip.module.common.SelfResult;
 import com.lifuz.trip.module.mine.Token;
 import com.lifuz.trip.module.mine.User;
+import com.lifuz.trip.module.mine.UserExper;
 import com.lifuz.trip.ui.fragment.MineFragment;
 import com.lifuz.trip.utils.SharedPreferencesUtils;
 
@@ -48,6 +49,84 @@ public class MinePresenter {
     public MinePresenter(MineFragment fragment, UserApi userApi) {
         this.fragment = fragment;
         this.userApi = userApi;
+    }
+
+    public void userExper(final Context context){
+
+        final Token token = SharedPreferencesUtils.getToken(context);
+
+        if (token == null) {
+
+            return;
+        }
+
+        Observable.just(null)
+                .flatMap(new Func1<Object, Observable<SelfResult<UserExper>>>() {
+                    @Override
+                    public Observable<SelfResult<UserExper>> call(Object o) {
+                        if (token.getToken() == null) {
+
+                            return Observable.error(new NullPointerException("token is null!!"));
+                        } else if (System.currentTimeMillis() / 1000 > token.getExpire()) {
+                            return Observable.error(new IllegalArgumentException("token is expires!!"));
+                        } else {
+
+                            return userApi.getUserExper(token.getUserId(),token.getToken());
+                        }
+                    }
+                }).retryWhen(new Func1<Observable<? extends Throwable>, Observable<?>>() {
+            @Override
+            public Observable<?> call(Observable<? extends Throwable> observable) {
+                return observable.flatMap(new Func1<Throwable, Observable<?>>() {
+                    @Override
+                    public Observable<?> call(Throwable throwable) {
+                        if (throwable instanceof NullPointerException || throwable instanceof IllegalArgumentException) {
+                            return userApi.userId(token.getUserId() + "")
+                                    .doOnNext(new Action1<SelfResult<Token>>() {
+                                        @Override
+                                        public void call(SelfResult<Token> tokenSelfResult) {
+                                            if (tokenSelfResult.isSuccess()) {
+
+                                                Token newToken = tokenSelfResult.getData();
+
+                                                token.setExpire(newToken.getExpire());
+                                                token.setToken(newToken.getToken());
+
+                                                Map<String, String> map = new HashMap<>();
+
+                                                String json = gson.toJson(tokenSelfResult.getData(), Token.class);
+
+                                                map.put("token", json);
+                                                SharedPreferencesUtils.saveTakon(context, map);
+
+                                            }
+
+                                        }
+                                    });
+                        }
+                        return Observable.error(throwable);
+                    }
+                });
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<SelfResult<UserExper>>() {
+                    @Override
+                    public void call(SelfResult<UserExper> userExperSelfResult) {
+                        Log.e(TAG,userExperSelfResult.toString());
+
+                        fragment.setUserExper(userExperSelfResult);
+
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.e(TAG, throwable.getMessage());
+
+                        fragment.setUserExper(new SelfResult<UserExper>(false,throwable.getMessage()));
+
+                    }
+                });
+
     }
 
     public void sgin(final Context context, final String msg){
@@ -112,15 +191,14 @@ public class MinePresenter {
                     public void call(SelfState selfState) {
                         Log.e(TAG, selfState.toString());
 
-//                        fragment.updateUrl(selfState, null);
+                        fragment.sginResult(selfState);
 
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         Log.e(TAG, throwable.getMessage());
-
-//                        fragment.updateUrl(null, throwable.getMessage());
+                        fragment.sginResult(SelfState.stateOf(205));
 
                     }
                 });

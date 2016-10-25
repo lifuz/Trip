@@ -124,9 +124,7 @@ public class LoginActivity extends BaseActivity {
 
         imm.hideSoftInputFromWindow(login_phone_et.getWindowToken(), 0);
 
-        dialog = new CustomDialog(this,R.style.CustomDialog);
-        dialog.setMessage("正在登录...");
-        dialog.show();
+
 
         String phone = login_phone_et.getText().toString();
         phone = phone.trim();
@@ -141,7 +139,7 @@ public class LoginActivity extends BaseActivity {
         String passwd = login_passwd_et.getText().toString();
 
         if (passwd.isEmpty()) {
-            SnackBarUtils.makeShort(btnLogin,"密码不能为空");
+            SnackBarUtils.makeShort(btnLogin,"密码不能为空").danger();
             btnLogin.setEnabled(true);
             return;
 
@@ -152,6 +150,10 @@ public class LoginActivity extends BaseActivity {
             btnLogin.setEnabled(true);
             return;
         }
+
+        dialog = new CustomDialog(this,R.style.CustomDialog);
+        dialog.setMessage("正在登录...");
+        dialog.show();
 
         loginPresenter.phoneLogin(Long.parseLong(phone),passwd);
 
