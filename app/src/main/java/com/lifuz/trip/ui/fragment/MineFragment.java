@@ -204,6 +204,9 @@ public class MineFragment extends BaseFragment {
                 btnSign.setText("已签到");
             }
 
+            progressBar.setMax(Integer.parseInt(userExper.getExperMaxValue() + ""));
+            progressBar.setProgress(Integer.parseInt(userExper.getExperValue() + ""));
+
             levelExper.setText (userExper.getExperValue() + "/" + userExper.getExperMaxValue());
 
 
