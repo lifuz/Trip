@@ -36,6 +36,7 @@ import com.lifuz.trip.module.mine.User;
 import com.lifuz.trip.module.mine.UserExper;
 import com.lifuz.trip.ui.activity.EditUserActivity;
 import com.lifuz.trip.ui.activity.LoginActivity;
+import com.lifuz.trip.ui.activity.mine.SettingActivity;
 import com.lifuz.trip.ui.component.DaggerMineComponent;
 import com.lifuz.trip.ui.module.MineModule;
 import com.lifuz.trip.ui.presenter.MinePresenter;
@@ -329,14 +330,7 @@ public class MineFragment extends BaseFragment {
     @OnClick(R.id.mine_setting)
     public void setting() {
 
-
-        Map<String, String> map = new HashMap<>();
-
-        map.put("token", "");
-        SharedPreferencesUtils.saveTakon(getContext(), map);
-
-        startActivity(new Intent(getContext(), LoginActivity.class));
-        getActivity().finish();
+        startActivity(new Intent(getContext(), SettingActivity.class));
 
     }
 

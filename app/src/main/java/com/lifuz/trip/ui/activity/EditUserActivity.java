@@ -17,10 +17,8 @@ import com.lifuz.trip.module.mine.User;
 import com.lifuz.trip.ui.component.DaggerEditUserComponent;
 import com.lifuz.trip.ui.module.EditUserModule;
 import com.lifuz.trip.ui.presenter.EditUserPresenter;
-import com.lifuz.trip.utils.CircleTransform;
 import com.lifuz.trip.utils.SnackBarUtils;
 import com.lifuz.trip.utils.StringUtils;
-import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 

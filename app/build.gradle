@@ -93,4 +93,5 @@ dependencies {
     compile 'commons-codec:commons-codec:20041127.091804'
 
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'org.simple:androideventbus:1.0.5.1'
 }

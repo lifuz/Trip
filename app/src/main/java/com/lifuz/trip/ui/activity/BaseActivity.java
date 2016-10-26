@@ -11,6 +11,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import org.simple.eventbus.EventBus;
+import org.simple.eventbus.Subscriber;
+
 /**
  * activity 基类
  *
@@ -28,6 +31,8 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        EventBus.getDefault().register(this);
 
         //安卓6.0开始某些权限需要动态获取，以下就是动态获取授权的方法
         if (Build.VERSION.SDK_INT >= 23) {
@@ -78,6 +83,12 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    @Subscriber(tag = "finish")
+    private void distroy(String msg){
+        Log.e(TAG,"收到关闭信息:" + msg);
+        finish();
+    }
+
     /**
      * 授权结果返回方法
      *
@@ -100,4 +111,9 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
 }
