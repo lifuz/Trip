@@ -1,7 +1,6 @@
 package com.lifuz.trip.ui.activity;
 
 import android.Manifest;
-import android.content.pm.ComponentInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
