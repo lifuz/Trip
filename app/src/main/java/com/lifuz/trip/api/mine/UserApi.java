@@ -39,7 +39,7 @@ public interface UserApi {
      * @return 更新结果
      */
     @Headers("Cache-Control: max-age=0")
-    @PUT("appUser/{userId}/update")
+    @POST("appUser/{userId}/update")
     Observable<SelfState> updateUser(@Path("userId") Long userId, @Header("Authorization") String token
             , @QueryMap Map<String, String> map);
 

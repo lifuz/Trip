@@ -149,10 +149,11 @@ public class MineFragment extends BaseFragment {
 
     }
 
-    @OnClick(R.id.tv_edit)
+    @OnClick({R.id.tv_edit,R.id.tv_occu})
     public void edit(){
 
         startActivity(new Intent(getActivity(), EditUserActivity.class));
+        getActivity().finish();
 
     }
 
@@ -266,7 +267,7 @@ public class MineFragment extends BaseFragment {
                 if (!StringUtils.isEmpty(user.getOccupation())){
 
                     tvOccu.setText(user.getOccupation());
-                    tvEdit.setVisibility(View.VISIBLE);
+                    tvOccu.setVisibility(View.VISIBLE);
                 }
 
             }

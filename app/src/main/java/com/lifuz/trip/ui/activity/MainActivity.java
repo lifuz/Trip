@@ -1,5 +1,6 @@
 package com.lifuz.trip.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.FragmentManager;
@@ -41,12 +42,21 @@ public class MainActivity extends BaseActivity {
 
         bottomBar.setItems(R.menu.bottombar_menu);
 
-        bottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.colorAccent));
+        bottomBar.mapColorForTab(0, ContextCompat.getColor(this, R.color.primary));
         bottomBar.mapColorForTab(1, ContextCompat.getColor(this, R.color.primary));
-        bottomBar.mapColorForTab(2, ContextCompat.getColor(this, R.color.primary_dark));
-        bottomBar.mapColorForTab(3, ContextCompat.getColor(this, R.color.accent));
+        bottomBar.mapColorForTab(2, ContextCompat.getColor(this, R.color.primary));
+        bottomBar.mapColorForTab(3, ContextCompat.getColor(this, R.color.primary));
 
 //        bottomBar.noNavBarGoodness();
+
+
+        Intent it = getIntent();
+
+        int page = it.getIntExtra("page",-1);
+
+        if (page != -1 && page < 4){
+            bottomBar.selectTabAtPosition(page,true);
+        }
 
         bottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
             @Override
@@ -94,6 +104,8 @@ public class MainActivity extends BaseActivity {
 
                     case R.id.bottom_four:
 
+                        Log.e(TAG,"zhixingl");
+
                         if (mineFragment == null) {
                             mineFragment = new MineFragment();
                             transaction.add(R.id.fragment_content,mineFragment);
@@ -117,6 +129,7 @@ public class MainActivity extends BaseActivity {
 
             }
         });
+
     }
 
     @Override
@@ -153,7 +166,7 @@ public class MainActivity extends BaseActivity {
         switch (keyCode){
             case KeyEvent.KEYCODE_BACK:
                 long secondTime=System.currentTimeMillis();
-                if(secondTime-firstTime>3000){
+                if(secondTime-firstTime>2000){
                     Toast.makeText(MainActivity.this,"再按一次退出程序",Toast.LENGTH_SHORT).show();
                     firstTime=secondTime;
                     return true;
