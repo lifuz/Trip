@@ -70,4 +70,19 @@ public class SharedPreferencesUtils {
         return token;
     }
 
+    /**
+     * 获取手机号
+     * @param context 上下文
+     * @return 手机号
+     */
+    public static String getPhone(Context context){
+
+        SharedPreferences share = context.getSharedPreferences("self", Activity.MODE_PRIVATE);
+
+        String phone = share.getString("phone", "");
+
+        return phone;
+
+    }
+
 }

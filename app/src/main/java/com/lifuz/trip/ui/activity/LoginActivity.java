@@ -30,6 +30,7 @@ import com.lifuz.trip.utils.SharedPreferencesUtils;
 import com.lifuz.trip.utils.SnackBarUtils;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -92,6 +93,10 @@ public class LoginActivity extends BaseActivity {
 
     }
 
+    /**
+     * 登录结果处理
+     * @param message 结果信息
+     */
     public void loginResult(String message) {
         dialog.dismiss();
         btnLogin.setEnabled(true);
@@ -101,6 +106,11 @@ public class LoginActivity extends BaseActivity {
         }
 
         if (message.equals("1")) {
+
+            Map<String,String> map = new HashMap<>();
+            map.put("phone",login_phone_et.getText().toString().trim());
+
+            SharedPreferencesUtils.saveTakon(this,map);
 
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
@@ -256,6 +266,19 @@ public class LoginActivity extends BaseActivity {
 
             }
         });
+
+        String phone = SharedPreferencesUtils.getPhone(this);
+
+        phone.trim();
+
+        login_phone_et.setText(phone);
+
+        CharSequence charSequence = login_phone_et.getText();
+        if (charSequence instanceof Spannable) {
+            Spannable spanText = (Spannable) charSequence;
+            Selection.setSelection(spanText, charSequence.length());
+
+        }
 
     }
 
