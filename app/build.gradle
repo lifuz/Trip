@@ -103,10 +103,9 @@ dependencies {
     compile 'com.github.florent37:materialtextfield:1.0.6'
     compile name: 'SMSSDK-2.1.2', ext: 'aar'
     compile name: 'SMSSDKGUI-2.1.2', ext: 'aar'
-    compile 'commons-codec:commons-codec:20041127.091804'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.simple:androideventbus:1.0.5.1'
-
     compile 'cn.jiguang.sdk:jpush:3.0.0'
     compile 'cn.jiguang.sdk:jcore:1.0.0'
+    compile 'commons-codec:commons-codec:1.10'
 }

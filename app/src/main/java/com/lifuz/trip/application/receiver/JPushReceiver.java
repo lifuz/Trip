@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.lifuz.trip.ui.activity.MainActivity;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

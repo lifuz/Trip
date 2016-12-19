@@ -108,7 +108,7 @@ public interface UserApi {
     @Headers("Cache-Control: max-age=0")
     @GET("appUser/{phone}/phoneLogin")
     Observable<SelfResult<Token>> phoneLogin(
-            @Path("phone") Long phone, @Query("passwd") String passwd);
+            @Path("phone") Long phone, @Query("passwd") String passwd,@Query("mode") int mode);
 
     /**
      * id号登录接口

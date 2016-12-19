@@ -32,7 +32,7 @@ public class ApiService {
 
     private static final String BASE_URL = "http://121.41.64.237/self-web/";
 
-//    private static final String BASE_URL = "http://192.168.0.108:8080/self-web/";
+//    private static final String BASE_URL = "http://192.168.0.108:8088/self-web/";
 
     @Provides
     @Singleton
