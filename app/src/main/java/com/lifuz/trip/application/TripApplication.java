@@ -6,6 +6,7 @@ import android.content.Context;
 import com.lifuz.trip.R;
 import com.lifuz.trip.api.ApiService;
 
+import cn.jpush.android.api.JPushInterface;
 import cn.smssdk.SMSSDK;
 
 /**
@@ -28,6 +29,8 @@ public class TripApplication extends Application {
         context = this;
 
         SMSSDK.initSDK(this, getString(R.string.sms_appkey), getString(R.string.sms_appsecret));
+        JPushInterface.setDebugMode(true);
+        JPushInterface.init(this);
 
         appComponent = DaggerAppComponent.builder()
                 .apiService(new ApiService())

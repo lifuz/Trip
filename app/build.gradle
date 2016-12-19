@@ -11,6 +11,19 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
+        }
+
+        manifestPlaceholders = [
+                JPUSH_PKGNAME : applicationId,
+                JPUSH_APPKEY : "fa140f994adf9535c5287aa7", //JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL : "developer-default", //暂时填写默认值即可.
+        ]
+
     }
     buildTypes {
         release {
@@ -18,6 +31,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
 }
 
 repositories{
@@ -34,29 +49,29 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     testCompile 'junit:junit:4.12'
     /**
-     *  lombok：去除bean沉余
+     *   lombok：去除bean沉余
      */
     compile 'javax.annotation:javax.annotation-api:1.2'
     compile 'org.projectlombok:lombok:1.16.6'
     /**
-     *  butterknife
+     *   butterknife
      */
     compile 'com.jakewharton:butterknife:8.0.1'
     apt 'com.jakewharton:butterknife-compiler:8.0.1'
     /**
-     * rxJava
+     *  rxJava
      */
     compile 'io.reactivex:rxjava:1.1.8'
     compile 'io.reactivex:rxandroid:1.2.1'
     /**
-     * dagger
+     *  dagger
      */
     compile 'com.google.dagger:dagger:2.5'
     apt "com.google.dagger:dagger-compiler:2.5"
     provided 'org.glassfish:javax.annotation:10.0-b28'
     /**
-     * rxBinding
-     * compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
+     *  rxBinding
+     *  compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
      compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
      compile 'com.jakewharton.rxbinding:rxbinding:0.4.0'
      */
@@ -64,34 +79,34 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding-appcompat-v7:0.4.0'
     compile 'com.jakewharton.rxbinding:rxbinding-design:0.4.0'
     /**
-     * retrofit2
+     *  retrofit2
      */
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
     /**
-     * okHttp
+     *  okHttp
      */
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
     /**
-     * gson
+     *  gson
      */
     compile 'com.google.code.gson:gson:2.7'
     /**
-     *  底部bar
+     *   底部bar
      */
     compile 'com.roughike:bottom-bar:1.4.0'
     /**
-     *  对话框特效
+     *   对话框特效
      */
     compile 'com.github.florent37:materialtextfield:1.0.6'
-
     compile name: 'SMSSDK-2.1.2', ext: 'aar'
     compile name: 'SMSSDKGUI-2.1.2', ext: 'aar'
-
     compile 'commons-codec:commons-codec:20041127.091804'
-
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'org.simple:androideventbus:1.0.5.1'
+
+    compile 'cn.jiguang.sdk:jpush:3.0.0'
+    compile 'cn.jiguang.sdk:jcore:1.0.0'
 }
