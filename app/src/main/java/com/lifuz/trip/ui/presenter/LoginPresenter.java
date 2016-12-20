@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.lifuz.trip.api.mine.UserApi;
+import com.lifuz.trip.enums.SelfState;
 import com.lifuz.trip.module.common.SelfResult;
 import com.lifuz.trip.module.mine.Token;
 import com.lifuz.trip.ui.activity.LoginActivity;
@@ -26,9 +27,9 @@ import rx.schedulers.Schedulers;
 
 /**
  * 登录页面
- *
+ * <p>
  * mvp presenter
- *
+ * <p>
  * 作者：李富
  * 邮箱：lifuzz@163.com
  * 时间：2016/10/21 15:05
@@ -48,7 +49,7 @@ public class LoginPresenter {
         this.userApi = userApi;
     }
 
-    public void phoneLogin(final Long phone, String passwd){
+    public void phoneLogin(final Long phone, String passwd) {
 
         passwd = new String(Hex.encodeHex(DigestUtils.md5(passwd)));
 
@@ -62,14 +63,14 @@ public class LoginPresenter {
             String publicKey = rsaEncryptor.getKeyFromIO(in);
             in.close();
             rsaEncryptor.loadPublicKey(publicKey);
-            passwd = rsaEncryptor.encryptWithBase64(passwd,1);
-            Log.e(TAG,passwd);
+            passwd = rsaEncryptor.encryptWithBase64(passwd, 1);
+            Log.e(TAG, passwd);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         final String finalPasswd = passwd;
-        userApi.phoneLogin(phone,finalPasswd,1)
+        userApi.phoneLogin(phone, finalPasswd, 1)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<SelfResult<Token>>() {
@@ -80,7 +81,7 @@ public class LoginPresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(TAG,e.getMessage());
+                        Log.e(TAG, e.getMessage());
 
                         activity.loginResult("网络错误");
 
@@ -89,19 +90,54 @@ public class LoginPresenter {
                     @Override
                     public void onNext(SelfResult<Token> tokenSelfResult) {
 
-                        Log.e(TAG,tokenSelfResult.toString());
+                        Log.e(TAG, tokenSelfResult.toString());
 
                         String message = "";
 
-                        if (tokenSelfResult.isSuccess()){
+                        if (tokenSelfResult.isSuccess()) {
 
                             Map<String, String> map = new HashMap<>();
 
-                            String json = gson.toJson(tokenSelfResult.getData(),Token.class);
 
-                            map.put("token",json);
-                            SharedPreferencesUtils.saveTakon(activity,map);
+                            String json = gson.toJson(tokenSelfResult.getData(), Token.class);
+
+                            map.put("token", json);
+                            SharedPreferencesUtils.saveTakon(activity, map);
                             message = "1";
+
+                            String jpushId = SharedPreferencesUtils.getValue(activity, "jpushId");
+
+                            Log.e(TAG,jpushId);
+
+                            if (!jpushId.isEmpty()) {
+
+                                Token token = tokenSelfResult.getData();
+
+                                map.clear();
+                                map.put("jpushId",jpushId);
+
+                                userApi.updateUser(token.getUserId(), token.getToken(), map)
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(new Observer<SelfState>() {
+                                            @Override
+                                            public void onCompleted() {
+
+                                            }
+
+                                            @Override
+                                            public void onError(Throwable e) {
+
+                                            }
+
+                                            @Override
+                                            public void onNext(SelfState selfState) {
+                                                if (selfState.getState() == 202)
+                                                    Log.e(TAG, "jpushId 更新成功");
+                                            }
+                                        });
+                            }
+
 
                         } else {
                             message = tokenSelfResult.getError();

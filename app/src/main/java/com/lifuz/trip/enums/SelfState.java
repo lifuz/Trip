@@ -13,6 +13,7 @@ public enum SelfState {
     SIGN_SUCCESS(204,"签到成功"),
     SIGN_FAILURE(205,"签到失败"),
     SIGN_ALREADY(206,"已签到"),
+    UPDATE_FAILURE(207,"更新失败"),
     EXPIRED(101,"token已过期"),
     INVALID(102,"token不合法"),
     VALID(103,"有效的token"),

@@ -71,6 +71,20 @@ public class SharedPreferencesUtils {
     }
 
     /**
+     * 根据key 获取value
+     * @param context 上下文
+     * @param key key 值
+     * @return value 值
+     */
+    public static String getValue(Context context,String key) {
+        SharedPreferences share = context.getSharedPreferences("self", Activity.MODE_PRIVATE);
+
+        String value = share.getString(key, "");
+
+        return value;
+    }
+
+    /**
      * 获取手机号
      * @param context 上下文
      * @return 手机号

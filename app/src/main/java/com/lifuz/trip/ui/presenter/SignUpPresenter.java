@@ -102,6 +102,39 @@ public class SignUpPresenter {
                             SharedPreferencesUtils.saveTakon(activity,map);
                             message = "1";
 
+                            String jpushId = SharedPreferencesUtils.getValue(activity, "jpushId");
+
+                            Log.e(TAG,jpushId);
+
+                            if (!jpushId.isEmpty()) {
+
+                                Token token = tokenSelfResult.getData();
+
+                                map.clear();
+                                map.put("jpushId",jpushId);
+
+                                userApi.updateUser(token.getUserId(), token.getToken(), map)
+                                        .subscribeOn(Schedulers.io())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(new Observer<SelfState>() {
+                                            @Override
+                                            public void onCompleted() {
+
+                                            }
+
+                                            @Override
+                                            public void onError(Throwable e) {
+
+                                            }
+
+                                            @Override
+                                            public void onNext(SelfState selfState) {
+                                                if (selfState.getState() == 202)
+                                                    Log.e(TAG, "jpushId 更新成功");
+                                            }
+                                        });
+                            }
+
                         } else {
                             message = tokenSelfResult.getError();
                         }
@@ -118,7 +151,23 @@ public class SignUpPresenter {
         map.put("userPhone",phone);
         map.put("userName",userName);
 
-        passwd = DigestUtils.md5Hex(passwd);
+        passwd = new String(Hex.encodeHex(DigestUtils.md5(passwd)));
+
+        AssetManager assetManager = activity.getAssets();
+
+        RSAEncryptor rsaEncryptor = RSAEncryptor.getInstance();
+
+        try {
+
+            InputStream in = assetManager.open("rsa_public_key.pem");
+            String publicKey = rsaEncryptor.getKeyFromIO(in);
+            in.close();
+            rsaEncryptor.loadPublicKey(publicKey);
+            passwd = rsaEncryptor.encryptWithBase64(passwd,1);
+            Log.e(TAG,passwd);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         map.put("userPasswd",passwd);
 

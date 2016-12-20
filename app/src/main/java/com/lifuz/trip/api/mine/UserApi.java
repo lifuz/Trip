@@ -106,7 +106,7 @@ public interface UserApi {
      * @return 登录结果
      */
     @Headers("Cache-Control: max-age=0")
-    @GET("appUser/{phone}/phoneLogin")
+    @POST("appUser/{phone}/phoneLogin")
     Observable<SelfResult<Token>> phoneLogin(
             @Path("phone") Long phone, @Query("passwd") String passwd,@Query("mode") int mode);
 

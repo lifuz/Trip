@@ -22,11 +22,15 @@ public class TripApplication extends Application {
 
     private static Context context = null;
 
+    private static TripApplication tripApplication = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
         context = this;
+
+        tripApplication = this;
 
         SMSSDK.initSDK(this, getString(R.string.sms_appkey), getString(R.string.sms_appsecret));
         JPushInterface.setDebugMode(true);
@@ -36,6 +40,10 @@ public class TripApplication extends Application {
                 .apiService(new ApiService())
                 .build();
 
+    }
+
+    public static TripApplication getTrip() {
+        return tripApplication;
     }
 
     public static Context getContext() {

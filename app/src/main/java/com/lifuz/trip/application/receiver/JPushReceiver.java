@@ -7,12 +7,28 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.lifuz.trip.api.mine.UserApi;
+import com.lifuz.trip.application.AppComponent;
+import com.lifuz.trip.application.TripApplication;
+import com.lifuz.trip.enums.SelfState;
+import com.lifuz.trip.module.common.SelfResult;
+import com.lifuz.trip.module.mine.Token;
+import com.lifuz.trip.utils.SharedPreferencesUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import cn.jpush.android.api.JPushInterface;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * 自定义接收器
@@ -24,6 +40,8 @@ import cn.jpush.android.api.JPushInterface;
 public class JPushReceiver extends BroadcastReceiver {
 	private static final String TAG = "JPush";
 
+    private Gson gson = new Gson();
+
 	@Override
 	public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
@@ -33,6 +51,23 @@ public class JPushReceiver extends BroadcastReceiver {
             String regId = bundle.getString(JPushInterface.EXTRA_REGISTRATION_ID);
             Log.d(TAG, "[JPushReceiver] 接收Registration Id : " + regId);
             //send the Registration Id to your server...
+
+            Map<String,String> map = new HashMap<>();
+            map.put("jpushId",regId);
+            SharedPreferencesUtils.saveTakon(TripApplication.getContext(),map);
+
+            final Token token = SharedPreferencesUtils.getToken(TripApplication.getContext());
+
+            if (token != null) {
+
+                AppComponent appComponent = TripApplication.getTrip().getAppComponent();
+
+                UserApi userApi = appComponent.getUserApi();
+
+                updateJpushId(token,regId,userApi);
+
+
+            }
                         
         } else if (JPushInterface.ACTION_MESSAGE_RECEIVED.equals(intent.getAction())) {
         	Log.d(TAG, "[JPushReceiver] 接收到推送下来的自定义消息: " + bundle.getString(JPushInterface.EXTRA_MESSAGE));
@@ -98,6 +133,81 @@ public class JPushReceiver extends BroadcastReceiver {
 		}
 		return sb.toString();
 	}
+
+    private void updateJpushId(final Token token,String jpushId,final UserApi userApi){
+        final Map<String,String> map = new HashMap<>();
+
+        map.put("jpushId",jpushId);
+
+        Observable.just(null)
+                .flatMap(new Func1<Object, Observable<SelfState>>() {
+                    @Override
+                    public Observable<SelfState> call(Object o) {
+
+                        if (token.getToken() == null) {
+
+                            return Observable.error(new NullPointerException("token is null!!"));
+                        } else if (System.currentTimeMillis() / 1000 > token.getExpire()) {
+                            return Observable.error(new IllegalArgumentException("token is expires!!"));
+                        } else {
+
+                            return userApi.updateUser(token.getUserId(), token.getToken(),map);
+                        }
+                    }
+                }).retryWhen(new Func1<Observable<? extends Throwable>, Observable<?>>() {
+
+            @Override
+            public Observable<?> call(Observable<? extends Throwable> observable) {
+
+                return observable.flatMap(new Func1<Throwable, Observable<?>>() {
+                    @Override
+                    public Observable<?> call(Throwable throwable) {
+
+                        if (throwable instanceof NullPointerException || throwable instanceof IllegalArgumentException) {
+                            return userApi.userId(token.getUserId() + "")
+                                    .doOnNext(new Action1<SelfResult<Token>>() {
+                                        @Override
+                                        public void call(SelfResult<Token> tokenSelfResult) {
+                                            if (tokenSelfResult.isSuccess()) {
+
+                                                Token newToken = tokenSelfResult.getData();
+
+                                                token.setExpire(newToken.getExpire());
+                                                token.setToken(newToken.getToken());
+
+                                                Map<String, String> map = new HashMap<>();
+
+                                                String json = gson.toJson(tokenSelfResult.getData(), Token.class);
+
+                                                map.put("token", json);
+                                                SharedPreferencesUtils.saveTakon(TripApplication.getContext(), map);
+
+                                            }
+
+                                        }
+                                    });
+                        }
+                        return Observable.error(throwable);
+                    }
+                });
+
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<SelfState>() {
+                    @Override
+                    public void call(SelfState selfState) {
+                        Log.e(TAG, selfState.toString());
+
+
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Log.e(TAG, throwable.getMessage());
+
+                    }
+                });
+    }
 	
 	//send msg to MainActivity
 	private void processCustomMessage(Context context, Bundle bundle) {
