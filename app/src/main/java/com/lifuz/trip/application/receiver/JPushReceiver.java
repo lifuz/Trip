@@ -14,10 +14,12 @@ import com.lifuz.trip.application.TripApplication;
 import com.lifuz.trip.enums.SelfState;
 import com.lifuz.trip.module.common.SelfResult;
 import com.lifuz.trip.module.mine.Token;
+import com.lifuz.trip.ui.activity.MainActivity;
 import com.lifuz.trip.utils.SharedPreferencesUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.simple.eventbus.EventBus;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -54,9 +56,9 @@ public class JPushReceiver extends BroadcastReceiver {
 
             Map<String,String> map = new HashMap<>();
             map.put("jpushId",regId);
-            SharedPreferencesUtils.saveTakon(TripApplication.getContext(),map);
+            SharedPreferencesUtils.saveTakon(context,map);
 
-            final Token token = SharedPreferencesUtils.getToken(TripApplication.getContext());
+            final Token token = SharedPreferencesUtils.getToken(context);
 
             if (token != null) {
 
@@ -80,6 +82,34 @@ public class JPushReceiver extends BroadcastReceiver {
         	
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(TAG, "[JPushReceiver] 用户点击打开了通知");
+
+            for (String key : bundle.keySet()) {
+                if (key.equals(JPushInterface.EXTRA_EXTRA)) {
+                    try {
+                        JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
+                        Iterator<String> it =  json.keys();
+
+                        while (it.hasNext()) {
+                            String myKey = it.next().toString();
+                            if (myKey.equals("type")){
+                                String value = json.optString(myKey);
+
+                                if (value.equals("no_sign")){
+                                    Intent sign = new Intent(context,MainActivity.class);
+
+                                    sign.putExtra("page",3);
+                                    EventBus.getDefault().post("no_sign","finish");
+                                    context.startActivity(sign);
+
+                                }
+
+                            }
+                        }
+                    } catch (JSONException e) {
+                        Log.e(TAG, "Get message extra JSON error!");
+                    }
+                }
+            }
             
         	//打开自定义的Activity
 //        	Intent i = new Intent(context, TestActivity.class);
